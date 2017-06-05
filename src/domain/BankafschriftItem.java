@@ -25,7 +25,7 @@ public class BankafschriftItem {
         this.naamRekeninghouder = naamRekeninghouder;
         this.iban = iban;
         this.omschrijving = omschrijving;
-        this.btwBedrag = bedrag * (btwPercentage / 100);
+        this.btwBedrag = bedrag * (btwPercentage / (100 + btwPercentage));
     }
 
     public int getId() {

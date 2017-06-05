@@ -72,27 +72,28 @@ public class ExcelWriter {
     }
 
     private void createContent(WritableSheet sheet) throws WriteException {
-        for (int i = 1; i < bankafschrift.getItems().size(); i++) {
-            BankafschriftItem item = bankafschrift.getItems().get(i - 1);
+        for (int i = 0; i < bankafschrift.getItems().size(); i++) {
+            BankafschriftItem item = bankafschrift.getItems().get(i);
+            int row = i + 1;
             //Datum
-            addDate(sheet, 0, i, item.getDate());
+            addDate(sheet, 0, row, item.getDate());
             //Rek. Nr.
-            addText(sheet, 1, i, item.getIban());
+            addText(sheet, 1, row, item.getIban());
             //Rekeninghouder
-            addText(sheet, 2, i, item.getNaamRekeninghouder());
+            addText(sheet, 2, row, item.getNaamRekeninghouder());
             if (item.getBijafCode() == 'C') {
                 // Ontvangst
-                addCurrency(sheet, 3, i, item.getBedrag());
+                addCurrency(sheet, 3, row, item.getBedrag());
                 // BTW
-                addCurrency(sheet, 4, i, item.getBtwBedrag());
+                addCurrency(sheet, 4, row, item.getBtwBedrag());
             } else {
                 // Uitgaaf
-                addCurrency(sheet, 5, i, item.getBedrag());
+                addCurrency(sheet, 5, row, item.getBedrag());
                 // BTW
-                addCurrency(sheet, 6, i, item.getBtwBedrag());
+                addCurrency(sheet, 6, row, item.getBtwBedrag());
             }
             //Overige omschrijving
-            addText(sheet, 8, i, item.getOmschrijving());
+            addText(sheet, 8, row, item.getOmschrijving());
         }
     }
 
