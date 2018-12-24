@@ -7,7 +7,7 @@
 <Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity"
       prefHeight="137.0" prefWidth="361.0" xmlns="http://javafx.com/javafx/8"
-      fx:controller="main.MainController">
+      fx:controller="javafx.MainController">
     <children>
         <Button id="btnOpen" fx:id="btnOpen" layoutX="53.0" layoutY="69.0" mnemonicParsing="false" onAction="#OnOpen"
                 prefHeight="25.0" prefWidth="118.0" text="Open"/>
