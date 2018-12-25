@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,26 +31,30 @@ public class CSVReader {
     Bankafschrift bankafschrift = new Bankafschrift();
     try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
       int id = 1;
+      br.readLine(); //Headers
       while ((line = br.readLine()) != null) {
         Pattern pat = Pattern.compile("([\"][^\"]*(?<!\\\\)[\"])");
         Matcher mat = pat.matcher(line);
-        mat.find();
-        Double amount = Double.valueOf(mat.group(1).replace('"',' ').replace(',','.'));
-        String[] item = line.split(splitBy);
-        for (int i = 0; i < item.length; i++) {
-          item[i] = item[i].replaceAll("^\"|\"$", "");
+        String[] items = new String[26];
+        int index = 0;
+        while (mat.find()) {
+          items[index] = mat.group();
+          index++;
         }
-        Date dt = new SimpleDateFormat("MM/dd/yyyy").parse(item[4]);
+        for (int i = 0; i < items.length; i++) {
+          items[i] = items[i].replaceAll("^\"|\"$", "");
+        }
+        Date dt = new SimpleDateFormat("yyyy-MM-dd").parse(items[4]);
+        Double amount = Double.valueOf(items[6].replace('"',' ').replace(',','.'));
         char code = 'C'; // Credit (Bij)
         if (amount < 0) {
           amount *= -1;
           code = 'D'; // Debit (Af)
         }
-        String accountHolder = item[11];
-        String iban = item[10];
-        itemDescription(item);
+        String accountHolder = items[9];
+        String iban = items[8];
 
-        BankafschriftItem bankafschriftItem = new BankafschriftItem(id, dt, code, amount, accountHolder, iban, itemDescription(item));
+        BankafschriftItem bankafschriftItem = new BankafschriftItem(id, dt, code, amount, accountHolder, iban, itemDescription(items));
         bankafschrift.addItem(bankafschriftItem);
         id++;
       }
@@ -61,7 +66,7 @@ public class CSVReader {
 
   private String itemDescription(String[] item) {
     ArrayList<String> itemDescription = new ArrayList<>();
-    for (int i = 20; i < 23; i++) {
+    for (int i = 19; i < 22; i++) {
       itemDescription.add(item[i]);
     }
     itemDescription.removeAll(Arrays.asList("", null));

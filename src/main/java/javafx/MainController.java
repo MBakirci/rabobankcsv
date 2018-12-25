@@ -9,6 +9,7 @@ import jxl.write.WriteException;
 import utils.CSVReader;
 import utils.ExcelWriter;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -20,10 +21,10 @@ public class MainController {
   private CSVReader csvReader = new CSVReader("", ",");
   private Bankafschrift afschrift;
 
+  private static String downloadsDir = System.getProperty("user.home") + File.separator + "Downloads";
+
   public void OnOpen(ActionEvent actionEvent) throws ParseException {
     FileChooser fileChooser = new FileChooser();
-    String currentUsersHomeDir = System.getProperty("user.home");
-    String downloadsDir = currentUsersHomeDir + File.separator + "Downloads";
     fileChooser.setInitialDirectory(new File(downloadsDir));
     fileChooser.setTitle("Open bankafschrift");
     fileChooser.getExtensionFilters().addAll(
@@ -42,6 +43,7 @@ public class MainController {
   public void OnSave(ActionEvent actionEvent) throws IOException, WriteException {
     ExcelWriter writer = new ExcelWriter(afschrift);
     FileChooser fileChooser = new FileChooser();
+    fileChooser.setInitialDirectory(new File(downloadsDir));
     FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xls)", "*.xls");
     fileChooser.getExtensionFilters().add(extFilter);
     File file = fileChooser.showSaveDialog(btnSave.getScene().getWindow());
@@ -53,6 +55,8 @@ public class MainController {
       }
       writer.setOutputFile(fileName);
       writer.write();
+      Desktop.getDesktop().open(new File(fileName));
     }
+
   }
 }
